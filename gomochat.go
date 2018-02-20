@@ -19,12 +19,10 @@ type GomoChatClient interface {
 	RemoveReceiveMessageListener(lis ReceiveMessageListener)
 }
 
-//export
 type ReceiveMessageListener interface {
 	OnReceiveMessage(msg string)
 }
 
-//export
 func NewGomoChatClient() GomoChatClient {
 	return &gomoChatClient{
 		listeners: make(map[ReceiveMessageListener]bool),
@@ -33,18 +31,18 @@ func NewGomoChatClient() GomoChatClient {
 
 //export
 func (c *gomoChatClient) Connect(ipaddress string, port int) error {
-	fmt.Printf("TODO IMPLEMENT\n")
+	fmt.Printf("(Connect) TODO IMPLEMENT\n")
 	return nil
 }
 
 //export
 func (c *gomoChatClient) Disconnect() {
-	fmt.Printf("TODO IMPLEMENT\n")
+	fmt.Printf("(Disconnect) TODO IMPLEMENT\n")
 }
 
 //export
 func (c *gomoChatClient) SendMessage(msg string) {
-	fmt.Printf("TODO IMPLEMENT\n")
+	fmt.Printf("(SendMessage) TODO IMPLEMENT\n")
 }
 
 //export

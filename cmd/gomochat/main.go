@@ -5,7 +5,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/pankona/gomochat/gomochat"
+	"github.com/pankona/gomochat"
 )
 
 type listener struct{}
