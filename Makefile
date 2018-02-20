@@ -3,7 +3,7 @@
 OUTDIR = $(CURDIR)/android/app/libs
 
 	
-all: cmd bind
+all: cmd bind lint
 
 .PHONY: cmd
 cmd:
@@ -13,6 +13,7 @@ cmd:
 bind:
 	gomobile bind -o $(OUTDIR)/gomochat.aar
 
+.PHONY: lint
 lint:
 	gometalinter $(CURDIR)/...
 
