@@ -1,6 +1,9 @@
 package gomochat
 
-import "sync"
+import (
+	"fmt"
+	"sync"
+)
 
 type gomoChatClient struct {
 	listeners map[ReceiveMessageListener]bool
@@ -30,15 +33,18 @@ func NewGomoChatClient() GomoChatClient {
 
 //export
 func (c *gomoChatClient) Connect(ipaddress string, port int) error {
+	fmt.Printf("TODO IMPLEMENT\n")
 	return nil
 }
 
 //export
 func (c *gomoChatClient) Disconnect() {
+	fmt.Printf("TODO IMPLEMENT\n")
 }
 
 //export
 func (c *gomoChatClient) SendMessage(msg string) {
+	fmt.Printf("TODO IMPLEMENT\n")
 }
 
 //export
