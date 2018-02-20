@@ -13,5 +13,8 @@ cmd:
 bind:
 	gomobile bind -o $(OUTDIR)/gomochat.aar
 
+lint:
+	gometalinter $(CURDIR)/...
+
 clean:
 	rm -rf $(OUTDIR)/*

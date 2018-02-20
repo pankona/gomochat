@@ -15,7 +15,7 @@ func (lis *listener) OnReceiveMessage(msg string) {
 }
 
 func main() {
-	c := gomochat.NewGomoChatClient()
+	c := gomochat.NewClient()
 
 	lis := &listener{}
 	c.AddReceiveMessageListener(lis)

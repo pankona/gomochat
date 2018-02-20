@@ -5,13 +5,14 @@ import (
 	"sync"
 )
 
-type gomoChatClient struct {
+type client struct {
 	listeners map[ReceiveMessageListener]bool
 	mu        sync.Mutex
 }
 
-//export
-type GomoChatClient interface {
+// Client is an interface of Client.
+// See NewClient to obtain its implementation.
+type Client interface {
 	Connect(ipaddress string, port int) error
 	Disconnect()
 	SendMessage(msg string)
@@ -19,41 +20,40 @@ type GomoChatClient interface {
 	RemoveReceiveMessageListener(lis ReceiveMessageListener)
 }
 
+// ReceiveMessageListener represents an interface of message listener.
+// To receive messages from peer, implement ReceiveMessageListener and
+// register the struct using AddReceiveMessageListener method.
 type ReceiveMessageListener interface {
 	OnReceiveMessage(msg string)
 }
 
-func NewGomoChatClient() GomoChatClient {
-	return &gomoChatClient{
+// NewClient returns and implemetation of Client interface
+func NewClient() Client {
+	return &client{
 		listeners: make(map[ReceiveMessageListener]bool),
 	}
 }
 
-//export
-func (c *gomoChatClient) Connect(ipaddress string, port int) error {
+func (c *client) Connect(ipaddress string, port int) error {
 	fmt.Printf("(Connect) TODO IMPLEMENT\n")
 	return nil
 }
 
-//export
-func (c *gomoChatClient) Disconnect() {
+func (c *client) Disconnect() {
 	fmt.Printf("(Disconnect) TODO IMPLEMENT\n")
 }
 
-//export
-func (c *gomoChatClient) SendMessage(msg string) {
+func (c *client) SendMessage(msg string) {
 	fmt.Printf("(SendMessage) TODO IMPLEMENT\n")
 }
 
-//export
-func (c *gomoChatClient) AddReceiveMessageListener(lis ReceiveMessageListener) {
+func (c *client) AddReceiveMessageListener(lis ReceiveMessageListener) {
 	c.mu.Lock()
 	defer c.mu.Unlock()
 	c.listeners[lis] = true
 }
 
-//export
-func (c *gomoChatClient) RemoveReceiveMessageListener(lis ReceiveMessageListener) {
+func (c *client) RemoveReceiveMessageListener(lis ReceiveMessageListener) {
 	c.mu.Lock()
 	defer c.mu.Unlock()
 	if _, ok := c.listeners[lis]; ok {
@@ -61,10 +61,14 @@ func (c *gomoChatClient) RemoveReceiveMessageListener(lis ReceiveMessageListener
 	}
 }
 
-func (c *gomoChatClient) onReceiveMessage(msg string) {
+// just comment out this function since this will be used later.
+// comment out to hide from gometalinter.
+/*
+func (c *client) onReceiveMessage(msg string) {
 	c.mu.Lock()
 	defer c.mu.Unlock()
 	for k := range c.listeners {
 		k.OnReceiveMessage(msg)
 	}
 }
+*/
