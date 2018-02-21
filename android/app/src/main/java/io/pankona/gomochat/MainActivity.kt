@@ -19,11 +19,9 @@ class MainActivity : AppCompatActivity(), ReceiveMessageListener {
         } catch (e: Exception) {
             e.printStackTrace()
         }
-
     }
 
     override fun onReceiveMessage(msg: String) {
         // TODO: implement
-
     }
 }
