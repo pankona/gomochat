@@ -49,7 +49,15 @@ class MainActivity : AppCompatActivity(), ReceiveMessageListener, View.OnClickLi
         val n = name.text
         val m = message.text
 
-        client.sendMessage("$n: $m")
-        message.setText("")
+        val msg = "$n: $m"
+        if (msg.isEmpty()) {
+            return
+        }
+        try {
+            client.sendMessage(msg)
+            message.setText("")
+        } catch (e: Exception) {
+            log.append("send error: "+e.message+"\n")
+        }
     }
 }
