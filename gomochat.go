@@ -27,6 +27,7 @@ type ReceiveMessageListener interface {
 
 type client struct {
 	listeners map[ReceiveMessageListener]bool
+	wsaddr    string
 	conn      *websocket.Conn
 	mu        sync.Mutex
 }
@@ -39,6 +40,7 @@ func NewClient() Client {
 }
 
 func (c *client) Connect(wsaddr string) error {
+	c.wsaddr = wsaddr
 	conn, _, err := websocket.DefaultDialer.Dial(wsaddr, nil)
 	if err != nil {
 		return fmt.Errorf("failed to establish websocket connection: %s", err.Error())
@@ -46,6 +48,10 @@ func (c *client) Connect(wsaddr string) error {
 	c.conn = conn
 
 	go func() {
+		defer func() {
+			c.conn.Close()
+			c.conn = nil
+		}()
 		for {
 			_, msg, err := c.conn.ReadMessage()
 			if err != nil {
@@ -75,7 +81,11 @@ func (c *client) Disconnect() {
 
 func (c *client) SendMessage(msg string) error {
 	if c.conn == nil {
-		return fmt.Errorf("connection is not established")
+		if c.wsaddr != "" {
+			if err := c.Connect(c.wsaddr); err != nil {
+				return fmt.Errorf("connection is not established")
+			}
+		}
 	}
 	err := c.conn.WriteMessage(websocket.TextMessage, []byte(msg))
 	if err != nil {
