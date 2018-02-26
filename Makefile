@@ -18,7 +18,7 @@ $(AAR): $(CURDIR)/gomochat.go
 
 .PHONY: lint
 lint:
-	gometalinter $(CURDIR)/...
+	gometalinter $(CURDIR)/... --exclude='cmd/server'
 
 clean:
 	rm -rf $(OUTDIR)/*
