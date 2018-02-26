@@ -51,5 +51,6 @@ class MainActivity : AppCompatActivity(), ReceiveMessageListener, View.OnClickLi
         val m = message.text
 
         client.sendMessage("$n: $m")
+        message.setText("")
     }
 }
