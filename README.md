@@ -10,12 +10,12 @@ gomobile を使ってチャットクライアントを作ってみる
 * `gomobile` コマンドが使える状態になっていること
 * Android Studio 3.0.1 がインストールされていること
 
-### コマンドラインで APK 生成
+### コマンドラインで apk をビルドする
 
 * トップディレクトリににて `make` を実行します。
   * `gomobile bind` による AAR 生成、その後 apk 生成までやります。
 
-### Android Studio で apk ビルド
+### Android Studio で apk をビルドする
 
 * `make bind` コマンドで gomochat.aar を生成しておきます。
 * `android` ディレクトリを Android Studio に読み込ませます。
