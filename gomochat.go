@@ -49,7 +49,10 @@ func (c *client) Connect(wsaddr string) error {
 
 	go func() {
 		defer func() {
-			c.conn.Close()
+			e := c.conn.Close()
+			if e != nil {
+				log.Printf("conn.Close returned err: %s", e.Error())
+			}
 			c.conn = nil
 		}()
 		for {
@@ -75,7 +78,10 @@ func (c *client) Disconnect() {
 		log.Printf("disconnect: %s", err.Error())
 	}
 
-	_ = c.conn.Close()
+	err = c.conn.Close()
+	if err != nil {
+		log.Printf("conn.Close returned err: %s", err.Error())
+	}
 	c.conn = nil
 }
 

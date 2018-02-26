@@ -23,13 +23,17 @@ func main() {
 
 	err := c.Connect("ws://127.0.0.1:8080/ws")
 	if err != nil {
-		fmt.Printf("failed to establish websocket connection: %s", err.Error())
+		fmt.Printf("failed to establish websocket connection: %s\n", err.Error())
 		os.Exit(1)
 	}
 	defer c.Disconnect()
 
 	for {
-		c.SendMessage("sending test message...")
+		err = c.SendMessage("sending test message...")
+		if err != nil {
+			fmt.Printf("sendMessage returned error: %s\n", err.Error())
+		}
+
 		<-time.After(1 * time.Second)
 	}
 }
