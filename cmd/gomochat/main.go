@@ -21,7 +21,7 @@ func main() {
 	c.AddReceiveMessageListener(lis)
 	defer c.RemoveReceiveMessageListener(lis)
 
-	err := c.Connect("127.0.0.1", 8080)
+	err := c.Connect("ws://127.0.0.1:8080/ws")
 	if err != nil {
 		fmt.Printf("failed to establish websocket connection: %s", err.Error())
 		os.Exit(1)

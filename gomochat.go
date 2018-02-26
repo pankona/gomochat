@@ -2,20 +2,18 @@ package gomochat
 
 import (
 	"fmt"
+	"log"
 	"sync"
-)
 
-type client struct {
-	listeners map[ReceiveMessageListener]bool
-	mu        sync.Mutex
-}
+	"github.com/gorilla/websocket"
+)
 
 // Client is an interface of Client.
 // See NewClient to obtain its implementation.
 type Client interface {
-	Connect(ipaddress string, port int) error
+	Connect(wsaddr string) error
 	Disconnect()
-	SendMessage(msg string)
+	SendMessage(msg string) error
 	AddReceiveMessageListener(lis ReceiveMessageListener)
 	RemoveReceiveMessageListener(lis ReceiveMessageListener)
 }
@@ -27,6 +25,12 @@ type ReceiveMessageListener interface {
 	OnReceiveMessage(msg string)
 }
 
+type client struct {
+	listeners map[ReceiveMessageListener]bool
+	conn      *websocket.Conn
+	mu        sync.Mutex
+}
+
 // NewClient returns and implemetation of Client interface
 func NewClient() Client {
 	return &client{
@@ -34,17 +38,50 @@ func NewClient() Client {
 	}
 }
 
-func (c *client) Connect(ipaddress string, port int) error {
-	fmt.Printf("(Connect) TODO IMPLEMENT\n")
+func (c *client) Connect(wsaddr string) error {
+	conn, _, err := websocket.DefaultDialer.Dial(wsaddr, nil)
+	if err != nil {
+		return fmt.Errorf("failed to establish websocket connection: %s", err.Error())
+	}
+	c.conn = conn
+
+	go func() {
+		for {
+			_, msg, err := c.conn.ReadMessage()
+			if err != nil {
+				log.Printf("receive message: %s", err.Error())
+				return
+			}
+			c.onReceiveMessage(string(msg))
+		}
+	}()
+
 	return nil
 }
 
 func (c *client) Disconnect() {
-	fmt.Printf("(Disconnect) TODO IMPLEMENT\n")
+	if c.conn == nil {
+		return
+	}
+	err := c.conn.WriteMessage(websocket.CloseMessage,
+		websocket.FormatCloseMessage(websocket.CloseNormalClosure, ""))
+	if err != nil {
+		log.Printf("disconnect: %s", err.Error())
+	}
+
+	_ = c.conn.Close()
+	c.conn = nil
 }
 
-func (c *client) SendMessage(msg string) {
-	fmt.Printf("(SendMessage) TODO IMPLEMENT\n")
+func (c *client) SendMessage(msg string) error {
+	if c.conn == nil {
+		return fmt.Errorf("connection is not established")
+	}
+	err := c.conn.WriteMessage(websocket.TextMessage, []byte(msg))
+	if err != nil {
+		return fmt.Errorf("send message: %s", err.Error())
+	}
+	return nil
 }
 
 func (c *client) AddReceiveMessageListener(lis ReceiveMessageListener) {
@@ -61,9 +98,6 @@ func (c *client) RemoveReceiveMessageListener(lis ReceiveMessageListener) {
 	}
 }
 
-// just comment out this function since this will be used later.
-// comment out to hide from gometalinter.
-/*
 func (c *client) onReceiveMessage(msg string) {
 	c.mu.Lock()
 	defer c.mu.Unlock()
@@ -71,4 +105,3 @@ func (c *client) onReceiveMessage(msg string) {
 		k.OnReceiveMessage(msg)
 	}
 }
-*/

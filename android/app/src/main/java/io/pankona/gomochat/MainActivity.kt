@@ -35,14 +35,13 @@ class MainActivity : AppCompatActivity(), ReceiveMessageListener, View.OnClickLi
         super.onResume()
 
         try {
-            client.connect("127.0.0.1", 8080)
+            client.connect("ws://192.168.0.106:8080/ws")
         } catch (e: Exception) {
             e.printStackTrace()
         }
     }
 
     override fun onReceiveMessage(msg: String) {
-        // TODO: implement
         log.append("$msg\n")
     }
 
