@@ -30,6 +30,6 @@ func main() {
 
 	for {
 		c.SendMessage("sending test message...")
-		<-time.After(2 * time.Second)
+		<-time.After(1 * time.Second)
 	}
 }

@@ -2,6 +2,7 @@ package io.pankona.gomochat
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.text.method.ScrollingMovementMethod
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
@@ -22,6 +23,7 @@ class MainActivity : AppCompatActivity(), ReceiveMessageListener, View.OnClickLi
         setContentView(R.layout.activity_main)
 
         log = this.findViewById(R.id.log) as TextView
+        log.movementMethod = ScrollingMovementMethod()
         name = this.findViewById(R.id.name) as EditText
         message = this.findViewById(R.id.message) as EditText
         send = this.findViewById(R.id.send) as Button
