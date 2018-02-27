@@ -40,6 +40,10 @@ func NewClient() Client {
 }
 
 func (c *client) Connect(wsaddr string) error {
+	return c.connect(wsaddr)
+}
+
+func (c *client) connect(wsaddr string) error {
 	c.wsaddr = wsaddr
 	conn, _, err := websocket.DefaultDialer.Dial(wsaddr, nil)
 	if err != nil {
@@ -88,7 +92,7 @@ func (c *client) Disconnect() {
 func (c *client) SendMessage(msg string) error {
 	if c.conn == nil {
 		if c.wsaddr != "" {
-			if err := c.Connect(c.wsaddr); err != nil {
+			if err := c.connect(c.wsaddr); err != nil {
 				return fmt.Errorf("connection is not established")
 			}
 		}
