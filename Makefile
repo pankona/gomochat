@@ -14,6 +14,7 @@ cmd:
 bind: $(AAR)
 
 $(AAR): $(CURDIR)/gomochat.go
+	mkdir -p $(OUTDIR)
 	gomobile bind -o $(OUTDIR)/gomochat.aar
 
 .PHONY: lint
